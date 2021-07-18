@@ -10,13 +10,20 @@ var _appstore = null
 func check_events():
     while _appstore.get_pending_event_count() > 0:
         var event = inappstore.pop_pending_event()
-        match event.type:
-            'product_info':
-                ...
-            'purchase':
-                ...
-            'restore':
-                ...
+	if event.result=="ok": # other possible values are "progress", "error", "unhandled"
+	
+	    # print(event.product_id)
+            match event.type:
+                'product_info':
+		    # fields: titles, descriptions, prices, ids, localized_prices, currency_codes, invalid_ids
+		    ...
+                'purchase':
+		    # fields: product_id, type_code, transaction_id, receipt		
+                    ...
+                'restore':
+		    # fields: product_id, type_code, transaction_id, receipt		
+                    ...
+		   
 
 func _on_Button_button_down():
 	var result = _appstore.restore_purchases()
