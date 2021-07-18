@@ -10,21 +10,27 @@ var _appstore = null
 func check_events():
     while _appstore.get_pending_event_count() > 0:
         var event = inappstore.pop_pending_event()
-        match event.type:
-            'product_info':
-                ...
-            'purchase':
-                ...
-            'restore':
-                ...
-
-func _on_Button_button_down():
-	var result = _appstore.restore_purchases()
+	if event.result=="ok": # other possible values are "progress", "error", "unhandled"
+	
+	    # print(event.product_id)
+            match event.type:
+                'product_info':
+		    # fields: titles, descriptions, prices, ids, localized_prices, currency_codes, invalid_ids
+		    ...
+                'purchase':
+		    # fields: product_id, transaction_id, receipt		
+                    ...
+                'restore':
+		    # fields: product_id, transaction_id, receipt		
+                    ...
+		   
+func _on_Purchase_button_down():
+    var result = _appstore.restore_purchases()
     ...
 
     var result = _appstore.purchase({'product_id': "product_1"})
     ...
-...
+...    
 
 func _ready():
 	if Engine.has_singleton("InAppStore"):
@@ -43,6 +49,11 @@ func _ready():
             print("failed requesting product info")
 	else:
 		print("no app store plugin")
+		
+func _on_Restore_button_down(): # such button is required by Apple for non-consumable products
+    var result = _appstore.restore_purchases()
+    ...
+    
 ```
 
 ## Methods
